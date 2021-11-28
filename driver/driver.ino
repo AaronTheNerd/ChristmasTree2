@@ -41,7 +41,7 @@ void setup() {
   strip.begin();                  // INITIALIZE NeoPixel strip object (REQUIRED)
   strip.show();                   // Turn OFF all pixels ASAP
   strip.setBrightness(255);       // Set BRIGHTNESS to max
-  Serial.begin(38400);            // Turn on serial
+  Serial.begin(115200);            // Turn on serial
   delay(500);
   char data = wait_for_uint8_t(); // Wait for python dummy byte
   if (data != 'a') {              // Check that the dummy byte was transmitted correctly
@@ -56,7 +56,6 @@ void setup() {
 // Main Loop
 void loop() {
   request_n_bytes(1);
-  strip.clear();                           // clear strip
   led_count = wait_for_uint8_t();  
   for (size_t i = 0; i < led_count; ++i) { // for each LED index, color pair
     index = wait_for_uint8_t();            // grab and set colors at index

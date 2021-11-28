@@ -21,10 +21,8 @@ def handshake(arduino):
 
 
 def wait_for_n_bytes(arduino, n):
-    print("Waiting for %d bytes" % n)
     while arduino.in_waiting < n:
         continue
-    print("Bytes found")
 
 
 def write_int_n_bytes(arduino, msg, n):
@@ -32,15 +30,15 @@ def write_int_n_bytes(arduino, msg, n):
 
 
 def run(animation):
-    arduino = serial.Serial('/dev/ttyUSB0', 38400, timeout=0.1)
+    arduino = serial.Serial('/dev/ttyUSB0', 115200, timeout=0.1)
     time.sleep(2)                       # Wait for the arduino to be ready
     success = handshake(arduino)
     if not success:
-        sys.exit("Handshake with Arduino failed.")                         
+        sys.exit("Handshake with Arduino failed.")
+    wait_for_n_bytes(arduino, 1)
+    arduino.read(1)
     while True:
         for frame in animation.frames:
-            wait_for_n_bytes(arduino, 1)
-            arduino.read(1)
             start_ms = round(time.time() * 1000)
             write_int_n_bytes(arduino, len(frame), 1)
             for index, color in frame.items():
@@ -48,9 +46,12 @@ def run(animation):
                 write_int_n_bytes(arduino, color.r, 1)
                 write_int_n_bytes(arduino, color.g, 1)
                 write_int_n_bytes(arduino, color.b, 1)
+            wait_for_n_bytes(arduino, 1)
+            arduino.read(1)
             end_ms = round(time.time() * 1000)
             frame_display_delay_ms = end_ms - start_ms
-            time.sleep((animation.hold_ms - frame_display_delay_ms) / 1000)
+            sleep_time_s = (animation.hold_ms - frame_display_delay_ms) / 1000
+            time.sleep(sleep_time_s if sleep_time_s > 0 else 0)
 
 
 
