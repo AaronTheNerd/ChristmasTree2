@@ -1,10 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 
 import color
 from animation import Animation
 
 
-class Preset(ABC):
+class Preset:
+    __metaclass__ = ABCMeta
     HOLD_MAX = (1 << 16) - 1
     @abstractmethod
     def get_animation(self):

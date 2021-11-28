@@ -3,8 +3,13 @@ import presets
 import arduino_serial
 
 
+# ==================================================================================================
+# ================================== ARDUINO MUST BE RUNNING FIRST =================================
+# ==================================================================================================
+
+
 def main():
-    preset = presets.SolidColorPreset(color.RED)
+    preset = presets.SolidTwoColorPreset(color.RED, color.GREEN)
     arduino_serial.run(preset.get_animation())
 
 

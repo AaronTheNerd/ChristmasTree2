@@ -33,28 +33,6 @@ uint8_t wait_for_uint8_t() {
 }
 
 
-uint16_t wait_for_uint16_t() {
-  uint8_t incoming_byte;
-  uint16_t ret = 0;
-  for (size_t i = 0; i < 2; ++i) {
-    incoming_byte = wait_for_uint8_t();
-    ret |= (0xff & incoming_byte) << ((1 - i) * 8);
-  }
-  return ret;
-}
-
-
-uint32_t wait_for_uint32_t() {
-  uint8_t incoming_byte;
-  uint32_t ret = 0;
-  for (size_t i = 0; i < 4; ++i) {
-    incoming_byte = wait_for_uint8_t();
-    ret |= (0xff & incoming_byte) << ((3 - i) * 8);
-  }
-  return ret;
-}
-
-
 // Setup
 void setup() {
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -79,8 +57,7 @@ void setup() {
 void loop() {
   request_n_bytes(1);
   strip.clear();                           // clear strip
-  led_count = wait_for_uint8_t();          // grab 1 byte for led_count 
-  request_n_bytes(led_count << 2);
+  led_count = wait_for_uint8_t();  
   for (size_t i = 0; i < led_count; ++i) { // for each LED index, color pair
     index = wait_for_uint8_t();            // grab and set colors at index
     red = wait_for_uint8_t();
