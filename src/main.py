@@ -9,7 +9,7 @@ import arduino_serial
 
 
 def main():
-    preset = presets.SolidTwoColorPreset(color.RED, color.GREEN)
+    preset = presets.SpinningRainbowPreset(200)
     arduino_serial.run(preset.get_animation())
 
 
